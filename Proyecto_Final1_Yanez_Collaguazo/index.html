@@ -4,17 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AirGuard - Calidad del Aire</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <main-menu></main-menu>
   <nav-sidebar></nav-sidebar>
 
-  <section id="contenido">
+  <section id="dashboard">
     <air-quality-dashboard></air-quality-dashboard>
     <air-quality-chart></air-quality-chart>
-    <user-recommendations></user-recommendations>
+  </section>
+
+  <section id="recomendaciones">
+    <data-crud></data-crud>
+  </section>
+
+  <section id="educativo">
     <educational-section></educational-section>
+  </section>
+
+  <section id="acerca">
+    <div style="margin-left: 220px; padding: 2rem;">
+      <h2>Acerca del Proyecto</h2>
+      <p>
+        AirGuard es una aplicación educativa que muestra datos simulados de calidad del aire en tiempo real,
+        y enseña a los usuarios cómo protegerse. Desarrollado con Web Components y JavaScript moderno.
+      </p>
+
+      <p>
+        Elaborado por: Yanez Karen y Collaguazo Elian
+      </p>
+    </div>
   </section>
 
   <script type="module" src="./componentes/main-menu.js"></script>
@@ -23,8 +44,6 @@
   <script type="module" src="./componentes/air-quality-chart.js"></script>
   <script type="module" src="./componentes/user-recommendations.js"></script>
   <script type="module" src="./componentes/educational-section.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
 </body>
 </html>

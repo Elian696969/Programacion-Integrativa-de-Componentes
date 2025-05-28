@@ -11,9 +11,20 @@ class AirQualityChart extends HTMLElement {
 
   loadData = async () => {
     try {
-      const response = await fetch("https://run.mocky.io/v3/2ea2871b-a7e1-4de1-b66a-f8c7ddf57f05");
+      const response = await fetch("https://run.mocky.io/v3/c485ff7c-8fea-4991-aa6b-239c202328ae");
       if (!response.ok) throw new Error('Error al obtener datos');
-      const data = await response.json();
+      const json = await response.json();
+
+      // Obtener última medición por estación
+      const latest = {};
+      json.calidad_aire.forEach(item => {
+        const estacion = item.estacion;
+        if (!latest[estacion] || new Date(item.fecha) > new Date(latest[estacion].fecha)) {
+          latest[estacion] = item;
+        }
+      });
+
+      const data = Object.values(latest);
       this.renderChart(data);
     } catch (error) {
       this.shadowRoot.innerHTML = `<p>Error cargando gráfico</p>`;
@@ -21,13 +32,13 @@ class AirQualityChart extends HTMLElement {
     }
   };
 
-  renderChart = (data) => {
+  renderChart = (stations) => {
     this.shadowRoot.innerHTML = `
       <style>
         .chart-container {
           margin-left: 220px;
           padding: 2rem;
-          max-width: 700px;
+          max-width: 800px;
         }
         canvas {
           background: #fff;
@@ -45,24 +56,19 @@ class AirQualityChart extends HTMLElement {
     this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['PM2.5', 'PM10', 'CO₂', 'O₃'],
+        labels: stations.map(e => e.estacion),
         datasets: [{
-          label: 'Concentración',
-          data: [data.pm25, data.pm10, data.co2, data.o3],
-          backgroundColor: [
-            '#3498db',
-            '#2ecc71',
-            '#f1c40f',
-            '#e74c3c'
-          ],
-          borderRadius: 8
+          label: 'PM2.5 (µg/m³)',
+          data: stations.map(e => e.pm25),
+          backgroundColor: '#3498db',
+          borderRadius: 6
         }]
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            display: false
+            display: true
           },
           tooltip: {
             callbacks: {
@@ -75,7 +81,7 @@ class AirQualityChart extends HTMLElement {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'µg/m³ o ppm'
+              text: 'Concentración'
             }
           }
         }
@@ -84,4 +90,4 @@ class AirQualityChart extends HTMLElement {
   };
 }
 
-customElements.define('air-quality-chart', AirQualityChart);
+customElements.define("air-quality-chart", AirQualityChart);

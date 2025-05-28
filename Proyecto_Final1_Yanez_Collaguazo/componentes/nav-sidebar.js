@@ -37,6 +37,7 @@ class NavSidebar extends HTMLElement {
           padding: 0.5rem 0;
           transition: background 0.3s;
           border-radius: 4px;
+          cursor: pointer;
         }
 
         nav a:hover {
@@ -47,9 +48,10 @@ class NavSidebar extends HTMLElement {
       <aside>
         <h2>Menú</h2>
         <nav>
-          <a href="#" data-target="dashboard">📊 Dashboard</a>
-          <a href="#" data-target="recomendaciones">💡 Recomendaciones</a>
-          <a href="#" data-target="educativo">📚 Educativo</a>
+          <a data-target="dashboard">Dashboard</a></br></br>
+          <a data-target="recomendaciones">Recomendaciones</a></br></br>
+          <a data-target="educativo">Educativo</a><br></br>
+          <a data-target="acerca">Acerca</a>
         </nav>
       </aside>
     `;
@@ -58,8 +60,11 @@ class NavSidebar extends HTMLElement {
     links.forEach(link => {
       link.addEventListener("click", e => {
         e.preventDefault();
-        const section = e.target.dataset.target;
-        alert(`Ir a sección: ${section}`); // Luego se puede conectar con el sistema de navegación real
+        const sectionId = e.target.getAttribute("data-target");
+        const section = document.getElementById(sectionId);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
       });
     });
   };
